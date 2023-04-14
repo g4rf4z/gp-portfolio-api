@@ -1,0 +1,9 @@
+{
+    "clientUrl": "CLIENT_URL",
+    "clientDomain": "CLIENT_DOMAIN",
+    "port": "PORT",
+    "publicKey": "PUBLIC_KEY",
+    "privateKey": "PRIVATE_KEY",
+    "nodemailerEmail": "NODEMAILER_EMAIL",
+    "nodemailerPassword": "NODEMAILER_PASSWORD"
+}

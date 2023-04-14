@@ -1,0 +1,86 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["extendedWhereUnique"]
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  firstname String
+  lastname  String
+  nickname  String    @unique
+  email     String    @unique
+  password  String
+  role      AdminRole @default(ADMIN)
+  isActive  Boolean   @default(true)
+
+  sessions Session[]
+
+  @@map("admins")
+}
+
+enum AdminRole {
+  SUPERADMIN
+  ADMIN
+}
+
+model Session {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  isActive  Boolean @default(true)
+  userAgent String?
+
+  admin   Admin  @relation(fields: [ownerId], references: [id])
+  ownerId String @db.ObjectId
+
+  @@map("sessions")
+}
+
+model ResetPasswordToken {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+
+  token   String  @unique
+  ownerId String
+  isValid Boolean @default(true)
+
+  @@map("reset_password_tokens")
+}
+
+model Skill {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name     String
+  image    String?
+  progress Int
+
+  @@map("skills")
+}
+
+model Experience {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  position String
+  company  String
+  city     String
+  country  String
+  from     DateTime
+  to       DateTime
+  tasks    String
+
+  @@map("experiences")
+}

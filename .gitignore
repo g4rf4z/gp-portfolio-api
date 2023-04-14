@@ -1,0 +1,13 @@
+# Project
+node_modules
+build
+
+# Env
+.env
+
+# Lock files
+yarn.lock
+package-lock.json
+
+# MISC
+.DS_Store

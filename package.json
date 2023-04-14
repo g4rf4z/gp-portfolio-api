@@ -1,0 +1,51 @@
+{
+    "name": "gp-portfolio-api",
+    "version": "1.0.0",
+    "description": "Portfolio API using Node.js, Express.js and TypeScript",
+    "repository": "https://github.com/g4rf4z/gp-portfolio-api",
+    "author": "g4rf4z <gregoire.pinte@gmail.com>",
+    "license": "MIT",
+    "engines": {
+        "node": "~18.15.0",
+        "npm": "~9.5.0"
+    },
+    "scripts": {
+        "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
+        "build": "tsc",
+        "postinstall": "npx prisma generate && npx prisma db push && tsc",
+        "start": "node build/app.js",
+        "prisma": "npx prisma generate && npx prisma db push",
+        "studio": "npx prisma studio",
+        "deps:clear": "rimraf node_modules package-lock.json",
+        "deps:reset": "npm run deps:clear && npm install"
+    },
+    "dependencies": {
+        "@prisma/client": "~4.12.0",
+        "bcrypt": "~5.1.0",
+        "config": "~3.3.9",
+        "cookie-parser": "~1.4.6",
+        "cors": "~2.8.5",
+        "crypto": "~1.0.1",
+        "dotenv": "~16.0.3",
+        "express": "~4.18.2",
+        "helmet": "~6.1.5",
+        "jsonwebtoken": "~9.0.0",
+        "nodemailer": "~6.9.1",
+        "prisma": "~4.12.0",
+        "rimraf": "~5.0.0",
+        "zod": "~3.21.4"
+    },
+    "devDependencies": {
+        "@types/bcrypt": "~5.0.0",
+        "@types/config": "~3.3.0",
+        "@types/cookie-parser": "~1.4.2",
+        "@types/cors": "~2.8.12",
+        "@types/express": "~4.17.17",
+        "@types/jsonwebtoken": "~9.0.1",
+        "@types/node": "~18.15.11",
+        "@types/nodemailer": "~6.4.6",
+        "mongodb-memory-server": "~8.12.1",
+        "ts-node-dev": "~2.0.0",
+        "typescript": "~5.0.3"
+    }
+}
