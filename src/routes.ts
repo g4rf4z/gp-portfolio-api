@@ -81,7 +81,7 @@ const routes = (app: Express) => {
   });
 
   // ------------------------- ROUTES -> AUTHENTICATION -------------------------
-  app.post("/login", [validateInputs(loginSchema)], loginController);
+  app.post("/login", validateInputs(loginSchema), loginController);
   app.post("/logout", requireAuth, logoutController);
   app.post(
     "/reset-password",
