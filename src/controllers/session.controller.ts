@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 
-import { handleError } from "../utils/errors";
-import { checkAdminClearance } from "../utils/checkPermissions";
+import { handleError } from "../utils/errors.util";
+import { checkAdminClearance } from "../utils/checkPermissions.util";
 
 import {
   readSession,

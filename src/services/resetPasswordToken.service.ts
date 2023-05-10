@@ -1,7 +1,7 @@
 import type { Prisma } from "@prisma/client";
 
-import { prisma } from "../utils/prisma";
-import { handlePrismaError } from "../utils/errors";
+import { prisma } from "../utils/prisma.util";
+import { handlePrismaError } from "../utils/errors.util";
 
 export const createResetPasswordToken = async (
   data: Prisma.ResetPasswordTokenCreateArgs["data"],

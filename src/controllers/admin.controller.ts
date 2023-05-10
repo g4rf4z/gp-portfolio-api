@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 
-import { checkAdminClearance } from "../utils/checkPermissions";
-import { compareData, hashString } from "../utils/hash.utils";
-import { handleError } from "../utils/errors";
-import { sendEmail } from "../utils/nodemailer";
+import { checkAdminClearance } from "../utils/checkPermissions.util";
+import { compareData, hashString } from "../utils/hash.util";
+import { handleError } from "../utils/errors.util";
+import { sendEmail } from "../utils/nodemailer.util";
 
 import {
   createAdmin,

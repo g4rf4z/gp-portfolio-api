@@ -2,7 +2,7 @@ import { object, string, nativeEnum, boolean, TypeOf } from "zod";
 
 import { AdminRole } from "@prisma/client";
 
-import { validatePasswordComplexity } from "../utils/customValidators";
+import { validatePasswordComplexity } from "../utils/customValidators.util";
 
 export const createAdminSchema = object({
   body: object({

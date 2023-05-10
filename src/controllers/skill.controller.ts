@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-import { handleError } from "../utils/errors";
+import { handleError } from "../utils/errors.util";
 
 import {
   createSkill,

@@ -1,6 +1,6 @@
 import { object, string, TypeOf } from "zod";
 
-import { validatePasswordComplexity } from "../utils/customValidators";
+import { validatePasswordComplexity } from "../utils/customValidators.util";
 
 export const loginSchema = object({
   body: object({

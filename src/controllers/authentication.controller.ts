@@ -4,11 +4,11 @@ import type { Prisma } from "@prisma/client";
 import config from "config";
 import crypto from "crypto";
 
-import { CustomError, handleError } from "../utils/errors";
-import { compareData, hashString } from "../utils/hash.utils";
-import type { JwtTokenData } from "../utils/jwt.utils";
-import { newAccessToken, newRefreshToken } from "../utils/jwt.utils";
-import { sendEmail } from "../utils/nodemailer";
+import { CustomError, handleError } from "../utils/errors.util";
+import { compareData, hashString } from "../utils/hash.util";
+import type { JwtTokenData } from "../utils/jwt.util";
+import { newAccessToken, newRefreshToken } from "../utils/jwt.util";
+import { sendEmail } from "../utils/nodemailer.util";
 
 import { readAdmin, updateAdmin } from "../services/admin.service";
 import { createSession, updateSessions } from "../services/session.service";
