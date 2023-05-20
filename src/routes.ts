@@ -1,7 +1,7 @@
 import { Express } from "express";
 
-import { requireAuth } from "./middlewares/requireAuthentication";
-import validateInputs from "./middlewares/validateInputs";
+import { requireAuth } from "./middlewares/requireAuthentication.middleware";
+import validateInputs from "./middlewares/validateInputs.middleware";
 
 import {
   loginSchema,

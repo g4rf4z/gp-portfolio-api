@@ -1,13 +1,13 @@
-import config from "config";
-import jwt from "jsonwebtoken";
+import config from 'config';
+import jwt from 'jsonwebtoken';
 
-import type { Admin, AdminRole, Session } from "@prisma/client";
+import type { Admin, AdminRole, Session } from '@prisma/client';
 
-import { readSession } from "../services/session.service";
+import { readSession } from '../services/session.service';
 
 // Read the private and public keys of the configuration folder.
-const privateKey = config.get<string>("privateKey").replace(/\\n/g, "\n");
-const publicKey = config.get<string>("publicKey").replace(/\\n/g, "\n");
+const privateKey = config.get<string>('privateKey');
+const publicKey = config.get<string>('publicKey');
 
 // Define a TS type that describes the data assigned in the JWT tokens.
 export type JwtTokenData = {
@@ -33,7 +33,7 @@ export const signJwt = (
 ) => {
   return jwt.sign(object, privateKey, {
     ...(options && options),
-    algorithm: "RS256", // Specify the cryptographic signature algorithm.
+    algorithm: 'RS256',
   });
 };
 
@@ -49,7 +49,7 @@ export const verifyJwt = (token: string) => {
   } catch (error: any) {
     return {
       valid: false,
-      expired: error.message === "token expired",
+      expired: error.message === 'token expired',
       decoded: null,
     };
   }
@@ -62,7 +62,7 @@ export const reIssueAccessToken = async ({
   refreshToken: string;
 }) => {
   const { decoded } = verifyJwt(refreshToken) as any;
-  if (!decoded || !decoded["sessionId"]) return false;
+  if (!decoded || !decoded['sessionId']) return false;
 
   // Define the parameters for finding the corresponding session.
   const findSessionParams = { id: decoded.sessionId, isActive: true };
@@ -89,18 +89,17 @@ export const reIssueAccessToken = async ({
 // Create a new access token from "tokenData" parameter.
 export const newAccessToken = (tokenData: JwtTokenData) => {
   return signJwt(tokenData, {
-    expiresIn: config.get<string>("accessTokenTtl"),
+    expiresIn: config.get<string>('accessTokenTtl'),
   });
 };
 
 // Create a new refresh token from the "tokenData" parameter.
 export const newRefreshToken = (tokenData: JwtTokenData) => {
-  // Use "accountId" and "sessionId" to create a refresh token that will be linked to this account.
   return signJwt(
     {
       accountId: tokenData.account.id,
       sessionId: tokenData.session.id,
     },
-    { expiresIn: config.get<string>("refreshTokenTtl") }
+    { expiresIn: config.get<string>('refreshTokenTtl') }
   );
 };

@@ -4,7 +4,7 @@ import helmet from "helmet";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
-import deserializeToken from "../middlewares/deserializeToken";
+import deserializeToken from "../middlewares/deserializeToken.middleware";
 
 import routes from "../routes";
 
