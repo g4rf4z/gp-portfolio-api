@@ -1,4 +1,4 @@
-import { object, string, TypeOf } from "zod";
+import { array, object, string, TypeOf } from 'zod';
 
 export const createExperienceSchema = object({
   body: object({
@@ -10,6 +10,7 @@ export const createExperienceSchema = object({
       from: string(),
       to: string(),
       tasks: string(),
+      technologies: array(string()),
     }).strict(),
   }).strict(),
 });
@@ -31,6 +32,7 @@ export const readExperiencesSchema = object({
       from: string(),
       to: string(),
       tasks: string(),
+      technologies: array(string()),
     })
       .strict()
       .optional(),
@@ -50,6 +52,7 @@ export const updateExperienceSchema = object({
       from: string(),
       to: string(),
       tasks: string(),
+      technologies: array(string()),
     }).strict(),
   }).strict(),
 });
