@@ -104,7 +104,7 @@ export const readExperiencesController = async (
     };
 
     const foundExperiences = await readExperiencesService(
-      req.body.params,
+      req.params,
       readExperiencesOptions
     );
 
