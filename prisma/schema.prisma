@@ -74,13 +74,14 @@ model Experience {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  position String
-  company  String
-  city     String
-  country  String
-  from     DateTime
-  to       DateTime
-  tasks    String
+  position     String
+  company      String
+  city         String
+  country      String
+  from         DateTime
+  to           DateTime
+  tasks        String
+  technologies String[]
 
   @@map("experiences")
 }

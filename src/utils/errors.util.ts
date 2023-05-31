@@ -1,5 +1,5 @@
-import { Prisma } from "@prisma/client";
-import { Response } from "express";
+import { Prisma } from '@prisma/client';
+import { Response } from 'express';
 
 export interface ICustomError {
   type?: string;
@@ -29,43 +29,43 @@ export const handlePrismaError = (
   if (error instanceof Prisma.PrismaClientKnownRequestError) {
     console.log(error);
     switch (error.code) {
-      case "P2002":
+      case 'P2002':
         return new CustomError({
-          type: "PrismaKnownError",
-          path: (error?.meta?.target as string)?.split("_")[1],
+          type: 'PrismaKnownError',
+          path: (error?.meta?.target as string)?.split('_')[1],
           code: 409,
-          message: "taken",
+          message: 'taken',
         });
-      case "P2023":
-      case "P2025":
+      case 'P2023':
+      case 'P2025':
         return new CustomError({
-          type: "PrismaKnownError",
+          type: 'PrismaKnownError',
           path: ressource,
           code: 404,
-          message: "non_found",
+          message: 'non_found',
         });
       default:
         return new CustomError({
-          type: "PrismaKnownError",
+          type: 'PrismaKnownError',
           path: ressource,
           code: 500,
           message: error.code,
         });
     }
   } else {
-    if (error.name === "NotFoundError") {
+    if (error.name === 'NotFoundError') {
       return new CustomError({
-        type: "PrismaClientGenericError",
+        type: 'PrismaClientGenericError',
         path: ressource,
         code: 404,
-        message: "not_found",
+        message: 'not_found',
       });
     }
     return new CustomError({
-      type: "PrismaClientGenericError",
+      type: 'PrismaClientGenericError',
       path: ressource,
       code: 500,
-      message: "unknown_error",
+      message: 'unknown_error',
     });
   }
 };

@@ -1,8 +1,9 @@
-import config from "config";
-import nodemailer from "nodemailer";
+import config from 'config';
+import nodemailer from 'nodemailer';
 
-const nodemailerEmail = config.get<string>("nodemailerEmail");
-const nodemailerPassword = config.get<string>("nodemailerPassword");
+const nodemailerService = config.get<string>('nodemailerService');
+const nodemailerEmail = config.get<string>('nodemailerEmail');
+const nodemailerPassword = config.get<string>('nodemailerPassword');
 
 interface EmailData {
   to: string;
@@ -13,7 +14,7 @@ interface EmailData {
 
 export const sendEmail = async (data: EmailData) => {
   const transporter = nodemailer.createTransport({
-    service: "gmail",
+    service: nodemailerService,
     auth: {
       user: nodemailerEmail,
       pass: nodemailerPassword,
@@ -29,8 +30,7 @@ export const sendEmail = async (data: EmailData) => {
   };
 
   try {
-    const info = await transporter.sendMail(emailOptions);
-    console.log("Email sent: " + info.response);
+    await transporter.sendMail(emailOptions);
   } catch (error) {
     console.error(error);
   }

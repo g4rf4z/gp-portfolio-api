@@ -1,22 +1,22 @@
-import type { Prisma } from "@prisma/client";
+import type { Prisma } from '@prisma/client';
 
-import { prisma } from "../utils/prisma";
-import { handlePrismaError } from "../utils/errors";
+import { prisma } from '../utils/prisma.util';
+import { handlePrismaError } from '../utils/errors.util';
 
-export const createExperience = async (
-  data: Prisma.ExperienceCreateArgs["data"],
-  options: Omit<Prisma.ExperienceCreateArgs, "data"> = {}
+export const createExperienceService = async (
+  data: Prisma.ExperienceCreateArgs['data'],
+  options: Omit<Prisma.ExperienceCreateArgs, 'data'> = {}
 ) => {
   try {
     return await prisma.experience.create({ data, ...options });
   } catch (error) {
-    throw handlePrismaError(error, "experience");
+    throw handlePrismaError(error, 'experience');
   }
 };
 
-export const readExperience = async (
-  params: Prisma.ExperienceFindUniqueOrThrowArgs["where"],
-  options: Omit<Prisma.ExperienceFindUniqueOrThrowArgs, "where"> = {}
+export const readExperienceService = async (
+  params: Prisma.ExperienceFindUniqueOrThrowArgs['where'],
+  options: Omit<Prisma.ExperienceFindUniqueOrThrowArgs, 'where'> = {}
 ) => {
   try {
     return await prisma.experience.findUniqueOrThrow({
@@ -24,25 +24,25 @@ export const readExperience = async (
       ...options,
     });
   } catch (error) {
-    throw handlePrismaError(error, "experience");
+    throw handlePrismaError(error, 'experience');
   }
 };
 
-export const readExperiences = async (
-  params: Prisma.ExperienceFindManyArgs["where"],
-  options: Omit<Prisma.ExperienceFindManyArgs, "where"> = {}
+export const readExperiencesService = async (
+  params: Prisma.ExperienceFindManyArgs['where'],
+  options: Omit<Prisma.ExperienceFindManyArgs, 'where'> = {}
 ) => {
   try {
     return await prisma.experience.findMany({ where: params, ...options });
   } catch (error) {
-    throw handlePrismaError(error, "experience");
+    throw handlePrismaError(error, 'experience');
   }
 };
 
-export const updateExperience = async (
-  params: Prisma.ExperienceUpdateArgs["where"],
-  data: Prisma.ExperienceUpdateArgs["data"],
-  options: Omit<Prisma.ExperienceUpdateArgs, "where" | "data"> = {}
+export const updateExperienceService = async (
+  params: Prisma.ExperienceUpdateArgs['where'],
+  data: Prisma.ExperienceUpdateArgs['data'],
+  options: Omit<Prisma.ExperienceUpdateArgs, 'where' | 'data'> = {}
 ) => {
   try {
     return await prisma.experience.update({
@@ -51,13 +51,13 @@ export const updateExperience = async (
       ...options,
     });
   } catch (error) {
-    throw handlePrismaError(error, "experience");
+    throw handlePrismaError(error, 'experience');
   }
 };
 
-export const deleteExperience = async (
-  params: Prisma.ExperienceDeleteArgs["where"],
-  options: Omit<Prisma.ExperienceDeleteArgs, "where">
+export const deleteExperienceService = async (
+  params: Prisma.ExperienceDeleteArgs['where'],
+  options: Omit<Prisma.ExperienceDeleteArgs, 'where'>
 ) => {
   try {
     return await prisma.experience.delete({
@@ -65,6 +65,6 @@ export const deleteExperience = async (
       ...options,
     });
   } catch (error) {
-    throw handlePrismaError(error, "experience");
+    throw handlePrismaError(error, 'experience');
   }
 };

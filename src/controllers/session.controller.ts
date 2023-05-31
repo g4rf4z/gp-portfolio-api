@@ -1,18 +1,18 @@
-import type { Request, Response } from "express";
+import type { Request, Response } from 'express';
 
-import { handleError } from "../utils/errors";
-import { checkAdminClearance } from "../utils/checkPermissions";
+import { handleError } from '../utils/errors.util';
+import { checkAdminClearance } from '../utils/checkPermissions.util';
 
 import {
-  readSession,
-  readSessions,
-  deleteSessions,
-} from "../services/session.service";
+  readSessionService,
+  readSessionsService,
+  deleteSessionsService,
+} from '../services/session.service';
 
-import type { ReadSessionsInput } from "../schemas/session.schema";
+import type { ReadSessionsInput } from '../schemas/session.schema';
 
 export const findOwnSessionController = async (
-  req: Request<{}, {}, ReadSessionsInput["body"]>,
+  req: Request<{}, {}, ReadSessionsInput['body']>,
   res: Response
 ) => {
   try {
@@ -39,7 +39,7 @@ export const findOwnSessionController = async (
         ownerId: true,
       },
     };
-    const foundOwnSession = await readSession(
+    const foundOwnSession = await readSessionService(
       { ownerId: res.locals?.account?.id, isActive: true },
       findOwnSessionOptions
     );
@@ -50,10 +50,10 @@ export const findOwnSessionController = async (
 };
 
 export const findSessionsController = async (
-  req: Request<{}, {}, ReadSessionsInput["body"]>,
+  req: Request<{}, {}, ReadSessionsInput['body']>,
   res: Response
 ) => {
-  if (!checkAdminClearance(res, ["SUPERADMIN"])) return;
+  if (!checkAdminClearance(res, ['SUPERADMIN'])) return;
 
   try {
     const findOwnSessionsOptions = {
@@ -79,7 +79,7 @@ export const findSessionsController = async (
         ownerId: true,
       },
     };
-    const foundOwnSessions = await readSessions(
+    const foundOwnSessions = await readSessionsService(
       { ownerId: req.body.params?.ownerId },
       findOwnSessionsOptions
     );
@@ -94,10 +94,12 @@ export const deleteInactiveSessionsController = async (
   req: Request,
   res: Response
 ) => {
-  if (!checkAdminClearance(res, ["SUPERADMIN"])) return;
+  if (!checkAdminClearance(res, ['SUPERADMIN'])) return;
 
   try {
-    const deletedInactiveSessions = await deleteSessions({ isActive: false });
+    const deletedInactiveSessions = await deleteSessionsService({
+      isActive: false,
+    });
     return res.send(deletedInactiveSessions);
   } catch (error) {
     return handleError(error, res);
