@@ -1,10 +1,10 @@
-import config from "config";
-import bcrypt from "bcrypt";
+import config from 'config';
+import bcrypt from 'bcrypt';
 
 // Hashe a given string using bcrypt and a specified salt work factor from configuration.
 export const hashString = async (data: string): Promise<string> => {
   try {
-    const salt = await bcrypt.genSalt(config.get<number>("saltWorkFactor"));
+    const salt = await bcrypt.genSalt(config.get<number>('saltWorkFactor'));
     const hash = bcrypt.hashSync(data, salt);
     return hash;
   } catch (error: any) {

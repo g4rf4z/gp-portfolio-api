@@ -1,14 +1,12 @@
-import { Request, Response } from "express";
-
-import { handleError } from "../utils/errors";
+import { Request, Response } from 'express';
 
 import {
-  createExperience,
-  readExperience,
-  readExperiences,
-  updateExperience,
-  deleteExperience,
-} from "../services/experience.service";
+  createExperienceService,
+  readExperienceService,
+  readExperiencesService,
+  updateExperienceService,
+  deleteExperienceService,
+} from '../services/experience.service';
 
 import type {
   CreateExperienceInput,
@@ -16,10 +14,12 @@ import type {
   ReadExperiencesInput,
   UpdateExperienceInput,
   DeleteExperienceInput,
-} from "../schemas/experience.schema";
+} from '../schemas/experience.schema';
+
+import { handleError } from '../utils/errors.util';
 
 export const createExperienceController = async (
-  req: Request<{}, {}, CreateExperienceInput["body"]>,
+  req: Request<{}, {}, CreateExperienceInput['body']>,
   res: Response
 ) => {
   try {
@@ -35,12 +35,15 @@ export const createExperienceController = async (
         from: true,
         to: true,
         tasks: true,
+        technologies: true,
       },
     };
-    const createdExperience = await createExperience(
+
+    const createdExperience = await createExperienceService(
       req.body.data,
       createExperienceOptions
     );
+
     return res.send(createdExperience);
   } catch (error) {
     return handleError(error, res);
@@ -48,7 +51,7 @@ export const createExperienceController = async (
 };
 
 export const readExperienceController = async (
-  req: Request<ReadExperienceInput["params"], {}, {}>,
+  req: Request<ReadExperienceInput['params'], {}, {}>,
   res: Response
 ) => {
   try {
@@ -64,12 +67,15 @@ export const readExperienceController = async (
         from: true,
         to: true,
         tasks: true,
+        technologies: true,
       },
     };
-    const foundExperience = await readExperience(
+
+    const foundExperience = await readExperienceService(
       req.params,
       readExperienceOptions
     );
+
     return res.send(foundExperience);
   } catch (error) {
     return handleError(error, res);
@@ -77,7 +83,7 @@ export const readExperienceController = async (
 };
 
 export const readExperiencesController = async (
-  req: Request<{}, {}, ReadExperiencesInput["body"]>,
+  req: Request<{}, {}, ReadExperiencesInput['body']>,
   res: Response
 ) => {
   try {
@@ -93,12 +99,15 @@ export const readExperiencesController = async (
         from: true,
         to: true,
         tasks: true,
+        technologies: true,
       },
     };
-    const foundExperiences = await readExperiences(
-      req.body.params,
+
+    const foundExperiences = await readExperiencesService(
+      req.params,
       readExperiencesOptions
     );
+
     if (foundExperiences.length === 0) return res.status(204).send();
 
     return res.send(foundExperiences);
@@ -109,9 +118,9 @@ export const readExperiencesController = async (
 
 export const updateExperienceController = async (
   req: Request<
-    UpdateExperienceInput["params"],
+    UpdateExperienceInput['params'],
     {},
-    UpdateExperienceInput["body"]
+    UpdateExperienceInput['body']
   >,
   res: Response
 ) => {
@@ -128,13 +137,16 @@ export const updateExperienceController = async (
         from: true,
         to: true,
         tasks: true,
+        technologies: true,
       },
     };
-    const updatedExperience = await updateExperience(
+
+    const updatedExperience = await updateExperienceService(
       { id: req.params.id },
       req.body.data,
       updateExperienceOptions
     );
+
     return res.send(updatedExperience);
   } catch (error) {
     return handleError(error, res);
@@ -142,7 +154,7 @@ export const updateExperienceController = async (
 };
 
 export const deleteExperienceController = async (
-  req: Request<DeleteExperienceInput["params"], {}, {}>,
+  req: Request<DeleteExperienceInput['params'], {}, {}>,
   res: Response
 ) => {
   try {
@@ -158,12 +170,15 @@ export const deleteExperienceController = async (
         from: true,
         to: true,
         tasks: true,
+        technologies: true,
       },
     };
-    const deletedExperience = await deleteExperience(
+
+    const deletedExperience = await deleteExperienceService(
       { id: req.params.id },
       deleteExperienceOptions
     );
+
     return res.send(deletedExperience);
   } catch (error) {
     return handleError(error, res);

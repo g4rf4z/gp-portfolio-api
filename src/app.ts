@@ -1,12 +1,11 @@
 // Configure environment variables.
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
 dotenv.config();
-import config from "config";
+import config from 'config';
 
-import createServer from "./server/createServer";
+import createServer from './server/createServer';
 
-const clientUrl = config.get<string>("clientUrl");
-const port = process.env.PORT || config.get<number>("port");
+const port = process.env.PORT || config.get<number>('port');
 const app = createServer();
 
 // Start the server.

@@ -1,6 +1,6 @@
-import { AdminRole } from "@prisma/client";
+import { AdminRole } from '@prisma/client';
 
-import { object, string, boolean, nativeEnum, TypeOf } from "zod";
+import { object, string, boolean, nativeEnum, TypeOf } from 'zod';
 
 export const readSessionsSchema = object({
   body: object({
