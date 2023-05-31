@@ -1,17 +1,17 @@
-import { Request, Response } from "express";
+import { Request, Response } from 'express';
 
-import { checkAdminClearance } from "../utils/checkPermissions";
-import { compareData, hashString } from "../utils/hash.utils";
-import { handleError } from "../utils/errors";
-import { sendEmail } from "../utils/nodemailer";
+import { checkAdminClearance } from '../utils/checkPermissions.util';
+import { compareData, hashString } from '../utils/hash.util';
+import { handleError } from '../utils/errors.util';
+import { sendEmail } from '../utils/nodemailer.util';
 
 import {
-  createAdmin,
-  readAdmin,
-  readAdmins,
-  updateAdmin,
-  deleteAdmin,
-} from "../services/admin.service";
+  createAdminService,
+  readAdminService,
+  readAdminsService,
+  updateAdminService,
+  deleteAdminService,
+} from '../services/admin.service';
 
 import type {
   CreateAdminInput,
@@ -23,20 +23,20 @@ import type {
   UpdateAdminRoleInput,
   DisableAdminInput,
   DeleteAdminInput,
-} from "../schemas/admin.schema";
+} from '../schemas/admin.schema';
 
 export const createAdminController = async (
-  req: Request<{}, {}, CreateAdminInput["body"]>,
+  req: Request<{}, {}, CreateAdminInput['body']>,
   res: Response
 ) => {
-  if (!checkAdminClearance(res, ["SUPERADMIN"])) return;
+  if (!checkAdminClearance(res, ['SUPERADMIN'])) return;
 
   try {
     if (
-      res.locals?.account?.role === "ADMIN" &&
-      ["SUPERADMIN", "ADMIN"].includes(req.body.data.role || "")
+      res.locals?.account?.role === 'ADMIN' &&
+      ['SUPERADMIN', 'ADMIN'].includes(req.body.data.role || '')
     ) {
-      req.body.data.role = "ADMIN";
+      req.body.data.role = 'ADMIN';
     }
 
     req.body.data.password = await hashString(req.body.data.password);
@@ -53,7 +53,10 @@ export const createAdminController = async (
         isActive: true,
       },
     };
-    const createdAdmin = await createAdmin(req.body.data, createAdminOptions);
+    const createdAdmin = await createAdminService(
+      req.body.data,
+      createAdminOptions
+    );
     return res.send(createdAdmin);
   } catch (error) {
     return handleError(error, res);
@@ -61,7 +64,7 @@ export const createAdminController = async (
 };
 
 export const readAdminController = async (
-  req: Request<ReadAdminInput["params"], {}, {}>,
+  req: Request<ReadAdminInput['params'], {}, {}>,
   res: Response
 ) => {
   try {
@@ -78,7 +81,7 @@ export const readAdminController = async (
         isActive: true,
       },
     };
-    const foundAdmin = await readAdmin(req.params, readAdminOptions);
+    const foundAdmin = await readAdminService(req.params, readAdminOptions);
     return res.send(foundAdmin);
   } catch (error) {
     return handleError(error, res);
@@ -86,7 +89,7 @@ export const readAdminController = async (
 };
 
 export const readAdminsController = async (
-  req: Request<{}, {}, ReadAdminsInput["body"]>,
+  req: Request<{}, {}, ReadAdminsInput['body']>,
   res: Response
 ) => {
   try {
@@ -103,7 +106,10 @@ export const readAdminsController = async (
         isActive: true,
       },
     };
-    const foundAdmins = await readAdmins(req.body.params, readAdminsOptions);
+    const foundAdmins = await readAdminsService(
+      req.body.params,
+      readAdminsOptions
+    );
     if (foundAdmins.length === 0) return res.status(204).send();
     return res.send(foundAdmins);
   } catch (error) {
@@ -112,7 +118,7 @@ export const readAdminsController = async (
 };
 
 export const updateCurrentAdminController = async (
-  req: Request<{}, {}, UpdateCurrentAdminInput["body"]>,
+  req: Request<{}, {}, UpdateCurrentAdminInput['body']>,
   res: Response
 ) => {
   try {
@@ -123,7 +129,7 @@ export const updateCurrentAdminController = async (
         nickname: true,
       },
     };
-    const updatedAdmin = await updateAdmin(
+    const updatedAdmin = await updateAdminService(
       { id: res.locals.account.id },
       req.body.data,
       updateAdminOptions
@@ -135,7 +141,7 @@ export const updateCurrentAdminController = async (
 };
 
 export const updateCurrentAdminEmailController = async (
-  req: Request<{}, {}, UpdateCurrentAdminEmailInput["body"]>,
+  req: Request<{}, {}, UpdateCurrentAdminEmailInput['body']>,
   res: Response
 ) => {
   try {
@@ -145,7 +151,7 @@ export const updateCurrentAdminEmailController = async (
         email: true,
       },
     };
-    const updatedAdmin = await updateAdmin(
+    const updatedAdmin = await updateAdminService(
       { id: res.locals.account.id },
       req.body.data,
       updateAdminOptions
@@ -153,7 +159,7 @@ export const updateCurrentAdminEmailController = async (
     if (updatedAdmin.email !== res.locals.account.email) {
       await sendEmail({
         to: res.locals.account.email && updatedAdmin.email,
-        subject: "Modification de votre adresse email",
+        subject: 'Modification de votre adresse email',
         text: `Bonjour ${updatedAdmin.firstname},
 
         Nous vous informons que votre adresse e-mail a été mise à jour avec succès.
@@ -179,12 +185,12 @@ export const updateCurrentAdminEmailController = async (
 };
 
 export const updateCurrentAdminPasswordController = async (
-  req: Request<{}, {}, UpdateCurrentAdminPasswordInput["body"]>,
+  req: Request<{}, {}, UpdateCurrentAdminPasswordInput['body']>,
   res: Response
 ) => {
   try {
     const findOwner = { id: res.locals.account.id };
-    const foundOwner = await readAdmin(findOwner);
+    const foundOwner = await readAdminService(findOwner);
     const passwordsMatch = await compareData(
       foundOwner.password,
       req.body.data.password
@@ -192,7 +198,7 @@ export const updateCurrentAdminPasswordController = async (
 
     if (!passwordsMatch) {
       return res.status(400).send({
-        message: "An error has occurred",
+        message: 'An error has occurred',
       });
     }
     const updateAdminOptions = {
@@ -203,14 +209,14 @@ export const updateCurrentAdminPasswordController = async (
     };
     const hashedNewPassword = await hashString(req.body.data.newPassword);
     delete req.body.data.newPasswordConfirmation;
-    const updatedAdmin = await updateAdmin(
+    const updatedAdmin = await updateAdminService(
       { id: res.locals.account.id },
       { password: hashedNewPassword },
       updateAdminOptions
     );
     await sendEmail({
       to: res.locals.account.email,
-      subject: "Modification de votre mot de passe",
+      subject: 'Modification de votre mot de passe',
       text: `Bonjour ${updatedAdmin.firstname},
 
         Nous vous informons que votre mot de passe a été modifié avec succès.
@@ -232,20 +238,20 @@ export const updateCurrentAdminPasswordController = async (
 
 export const updateAdminRoleController = async (
   req: Request<
-    UpdateAdminRoleInput["params"],
+    UpdateAdminRoleInput['params'],
     {},
-    UpdateAdminRoleInput["body"]
+    UpdateAdminRoleInput['body']
   >,
   res: Response
 ) => {
-  if (!checkAdminClearance(res, ["SUPERADMIN"])) return;
+  if (!checkAdminClearance(res, ['SUPERADMIN'])) return;
 
   try {
     if (
-      res.locals?.account?.role === "ADMIN" &&
-      ["SUPERADMIN", "ADMIN"].includes(req.body.data.role || "")
+      res.locals?.account?.role === 'ADMIN' &&
+      ['SUPERADMIN', 'ADMIN'].includes(req.body.data.role || '')
     ) {
-      req.body.data.role = "ADMIN";
+      req.body.data.role = 'ADMIN';
     }
 
     const updateAdminOptions = {
@@ -253,7 +259,7 @@ export const updateAdminRoleController = async (
         role: true,
       },
     };
-    const updatedAdmin = await updateAdmin(
+    const updatedAdmin = await updateAdminService(
       { id: req.params.id },
       req.body.data,
       updateAdminOptions
@@ -265,11 +271,11 @@ export const updateAdminRoleController = async (
 };
 
 export const disableAdminController = async (
-  req: Request<DisableAdminInput["params"], {}, {}>,
+  req: Request<DisableAdminInput['params'], {}, {}>,
   res: Response
 ) => {
   try {
-    if (!checkAdminClearance(res, ["SUPERADMIN"])) return;
+    if (!checkAdminClearance(res, ['SUPERADMIN'])) return;
 
     const updateAdminOptions = {
       select: {
@@ -277,7 +283,7 @@ export const disableAdminController = async (
       },
     };
 
-    const updatedAdmin = await updateAdmin(
+    const updatedAdmin = await updateAdminService(
       { id: req.params.id },
       { isActive: false },
       updateAdminOptions
@@ -289,11 +295,11 @@ export const disableAdminController = async (
 };
 
 export const deleteAdminController = async (
-  req: Request<DeleteAdminInput["params"], {}, {}>,
+  req: Request<DeleteAdminInput['params'], {}, {}>,
   res: Response
 ) => {
   try {
-    if (!checkAdminClearance(res, ["SUPERADMIN"])) return;
+    if (!checkAdminClearance(res, ['SUPERADMIN'])) return;
 
     const deleteAdminOptions = {
       select: {
@@ -308,7 +314,7 @@ export const deleteAdminController = async (
         isActive: true,
       },
     };
-    const deletedAdmin = await deleteAdmin(
+    const deletedAdmin = await deleteAdminService(
       { id: req.params.id },
       deleteAdminOptions
     );

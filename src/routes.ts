@@ -1,26 +1,26 @@
-import { Express } from "express";
+import { Express } from 'express';
 
-import { requireAuth } from "./middlewares/requireAuthentication";
-import validateInputs from "./middlewares/validateInputs";
+import { requireAuth } from './middlewares/requireAuthentication.middleware';
+import validateInputs from './middlewares/validateInputs.middleware';
 
 import {
   loginSchema,
   resetPasswordSchema,
   setPasswordSchema,
-} from "./schemas/authentication.schema";
+} from './schemas/authentication.schema';
 import {
   loginController,
   logoutController,
   resetPasswordController,
   setNewPasswordController,
-} from "./controllers/authentication.controller";
+} from './controllers/authentication.controller';
 
-import { readSessionsSchema } from "./schemas/session.schema";
+import { readSessionsSchema } from './schemas/session.schema';
 import {
   findOwnSessionController,
   findSessionsController,
   deleteInactiveSessionsController,
-} from "./controllers/session.controller";
+} from './controllers/session.controller';
 
 import {
   createAdminSchema,
@@ -32,7 +32,7 @@ import {
   updateAdminRoleSchema,
   disableAdminSchema,
   deleteAdminSchema,
-} from "./schemas/admin.schema";
+} from './schemas/admin.schema';
 import {
   createAdminController,
   readAdminController,
@@ -43,7 +43,7 @@ import {
   updateAdminRoleController,
   disableAdminController,
   deleteAdminController,
-} from "./controllers/admin.controller";
+} from './controllers/admin.controller';
 
 import {
   createSkillSchema,
@@ -51,14 +51,14 @@ import {
   readSkillsSchema,
   updateSkillSchema,
   deleteSkillSchema,
-} from "./schemas/skill.schema";
+} from './schemas/skill.schema';
 import {
   createSkillController,
   readSkillController,
   readSkillsController,
   updateSkillController,
   deleteSkillController,
-} from "./controllers/skill.controller";
+} from './controllers/skill.controller';
 
 import {
   createExperienceSchema,
@@ -66,144 +66,144 @@ import {
   readExperiencesSchema,
   updateExperienceSchema,
   deleteExperienceSchema,
-} from "./schemas/experience.schema";
+} from './schemas/experience.schema';
 import {
   createExperienceController,
   readExperienceController,
   readExperiencesController,
   updateExperienceController,
   deleteExperienceController,
-} from "./controllers/experience.controller";
+} from './controllers/experience.controller';
 
 const routes = (app: Express) => {
-  app.get("/", (req, res) => {
-    return res.send("Hello World");
+  app.get('/', (req, res) => {
+    return res.send('Hello World');
   });
 
   // ------------------------- ROUTES -> AUTHENTICATION -------------------------
-  app.post("/login", [validateInputs(loginSchema)], loginController);
-  app.post("/logout", requireAuth, logoutController);
+  app.post('/login', validateInputs(loginSchema), loginController);
+  app.post('/logout', requireAuth, logoutController);
   app.post(
-    "/reset-password",
+    '/reset-password',
     [validateInputs(resetPasswordSchema)],
     resetPasswordController
   );
   app.post(
-    "/set-password/:id/:token",
+    '/set-password/:id/:token',
     [validateInputs(setPasswordSchema)],
     setNewPasswordController
   );
 
   // ------------------------- ROUTES -> SESSIONS -------------------------
   app.get(
-    "/me/session",
+    '/me/session',
     [requireAuth, validateInputs(readSessionsSchema)],
     findOwnSessionController
   );
   app.get(
-    "/sessions",
+    '/sessions',
     [requireAuth, validateInputs(readSessionsSchema)],
     findSessionsController
   );
   app.delete(
-    "/inactive-sessions",
+    '/inactive-sessions',
     [requireAuth],
     deleteInactiveSessionsController
   );
 
   // ------------------------- ROUTES -> ADMINS -------------------------
   app.post(
-    "/admins",
+    '/admins',
     [requireAuth, validateInputs(createAdminSchema)],
     createAdminController
   );
   app.get(
-    "/admins/:id",
+    '/admins/:id',
     [requireAuth, validateInputs(readAdminSchema)],
     readAdminController
   );
   app.get(
-    "/admins",
+    '/admins',
     [requireAuth, validateInputs(readAdminsSchema)],
     readAdminsController
   );
   app.patch(
-    "/me",
+    '/me',
     [requireAuth, validateInputs(updateCurrentAdminSchema)],
     updateCurrentAdminController
   );
   app.patch(
-    "/me/email",
+    '/me/email',
     [requireAuth, validateInputs(updateCurrentAdminEmailSchema)],
     updateCurrentAdminEmailController
   );
   app.patch(
-    "/me/password",
+    '/me/password',
     [requireAuth, validateInputs(updateCurrentAdminPasswordSchema)],
     updateCurrentAdminPasswordController
   );
   app.patch(
-    "/admins/:id/role",
+    '/admins/:id/role',
     [requireAuth, validateInputs(updateAdminRoleSchema)],
     updateAdminRoleController
   );
   app.patch(
-    "/admins/:id/disable",
+    '/admins/:id/disable',
     [requireAuth, validateInputs(disableAdminSchema)],
     disableAdminController
   );
   app.delete(
-    "/admins/:id",
+    '/admins/:id',
     [requireAuth, validateInputs(deleteAdminSchema)],
     deleteAdminController
   );
 
   // ------------------------- ROUTES -> SKILLS -------------------------
   app.post(
-    "/skills",
+    '/skills',
     [requireAuth, validateInputs(createSkillSchema)],
     createSkillController
   );
   app.get(
-    "/skills/:id",
+    '/skills/:id',
     [validateInputs(readSkillSchema)],
     readSkillController
   );
-  app.get("/skills", [validateInputs(readSkillsSchema)], readSkillsController);
+  app.get('/skills', [validateInputs(readSkillsSchema)], readSkillsController);
   app.patch(
-    "/skills/:id",
+    '/skills/:id',
     [requireAuth, validateInputs(updateSkillSchema)],
     updateSkillController
   );
   app.delete(
-    "/skills/:id",
+    '/skills/:id',
     [requireAuth, validateInputs(deleteSkillSchema)],
     deleteSkillController
   );
 
   // ------------------------- ROUTES -> EXPERIENCES -------------------------
   app.post(
-    "/experiences",
+    '/experiences',
     [requireAuth, validateInputs(createExperienceSchema)],
     createExperienceController
   );
   app.get(
-    "/experiences/:id",
+    '/experiences/:id',
     [validateInputs(readExperienceSchema)],
     readExperienceController
   );
   app.get(
-    "/experiences",
+    '/experiences',
     [validateInputs(readExperiencesSchema)],
     readExperiencesController
   );
   app.patch(
-    "/experiences/:id",
+    '/experiences/:id',
     [requireAuth, validateInputs(updateExperienceSchema)],
     updateExperienceController
   );
   app.delete(
-    "/experiences/:id",
+    '/experiences/:id',
     [requireAuth, validateInputs(deleteExperienceSchema)],
     deleteExperienceController
   );

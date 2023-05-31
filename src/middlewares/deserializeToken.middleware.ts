@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { verifyJwt, reIssueAccessToken } from '../utils/jwt.utils';
+import { verifyJwt, reIssueAccessToken } from '../utils/jwt.util';
 
 const deserializeToken = async (
   req: Request,
