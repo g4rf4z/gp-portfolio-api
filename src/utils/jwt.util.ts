@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 
 import type { Admin, AdminRole, Session } from '@prisma/client';
 
-import { readSession } from '../services/session.service';
+import { readSessionService } from '../services/session.service';
 
 // Read the private and public keys of the configuration folder.
 const privateKey = config.get<string>('privateKey');
@@ -71,7 +71,7 @@ export const reIssueAccessToken = async ({
 
   try {
     // Try to find the session using the "findSessionParams".
-    foundSession = (await readSession(findSessionParams, {
+    foundSession = (await readSessionService(findSessionParams, {
       include: { admin: true },
     })) as AdminSession;
     // Retrieve the associated admin account.

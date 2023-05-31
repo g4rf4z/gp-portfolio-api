@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction } from 'express';
 
 export const requireAuth = (
   req: Request,
@@ -16,6 +16,6 @@ export const requireAuth = (
   } = res.locals?.account;
 
   if (!firstname || !lastname || !email) return res.sendStatus(403);
-  if (!["SUPERADMIN", "ADMIN"].includes(role)) return res.sendStatus(403);
+  if (!['SUPERADMIN', 'ADMIN'].includes(role)) return res.sendStatus(403);
   return next();
 };

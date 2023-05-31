@@ -10,13 +10,19 @@ import type { JwtTokenData } from '../utils/jwt.util';
 import { newAccessToken, newRefreshToken } from '../utils/jwt.util';
 import { sendEmail } from '../utils/nodemailer.util';
 
-import { readAdmin, updateAdmin } from '../services/admin.service';
-import { createSession, updateSessions } from '../services/session.service';
 import {
-  createResetPasswordToken,
-  findResetPasswordToken,
-  updateResetPasswordToken,
-  updateResetPasswordTokens,
+  readAdminService,
+  updateAdminService,
+} from '../services/admin.service';
+import {
+  createSessionService,
+  updateSessionsService,
+} from '../services/session.service';
+import {
+  createResetPasswordTokenService,
+  findResetPasswordTokenService,
+  updateResetPasswordTokenService,
+  updateResetPasswordTokensService,
 } from '../services/resetPasswordToken.service';
 
 import type {
@@ -52,7 +58,7 @@ export const loginController = async (
     // Check if account exists.
     try {
       const findOwnerParams = { email: req.body.data.email };
-      foundOwner = await readAdmin(findOwnerParams);
+      foundOwner = await readAdminService(findOwnerParams);
     } catch (error) {
       throw badCredentials;
     }
@@ -90,13 +96,13 @@ export const loginController = async (
         admin: true,
       },
     };
-    const createdSession = await createSession(
+    const createdSession = await createSessionService(
       createSessionData,
       createdSessionOptions
     );
 
     // Revoke active sessions.
-    updateSessions(
+    updateSessionsService(
       {
         ownerId: foundOwner.id,
         isActive: true,
@@ -149,7 +155,7 @@ export const logoutController = async (req: Request, res: Response) => {
   try {
     // Revoke all active sessions.
     res.locals = {};
-    updateSessions(
+    updateSessionsService(
       { ownerId: res.locals?.account?.id, isActive: true },
       { isActive: false }
     );
@@ -190,10 +196,10 @@ export const resetPasswordController = async (
 
     // Check if the account exists from the email entered.
     const foundAccountParams = { email: req.body.data.email };
-    foundAccount = await readAdmin(foundAccountParams);
+    foundAccount = await readAdminService(foundAccountParams);
 
     // Invalidate previous reset password tokens.
-    await updateResetPasswordTokens(
+    await updateResetPasswordTokensService(
       { ownerId: foundAccount.id },
       { isValid: false }
     );
@@ -208,7 +214,7 @@ export const resetPasswordController = async (
     };
 
     // Create a password reset token with the provided data.
-    await createResetPasswordToken(createTokenData);
+    await createResetPasswordTokenService(createTokenData);
 
     // Send a password reset email.
     await sendEmail({
@@ -239,7 +245,7 @@ export const setNewPasswordController = async (
   try {
     let foundToken;
     try {
-      foundToken = await findResetPasswordToken({
+      foundToken = await findResetPasswordTokenService({
         ownerId: req.params.id,
         isValid: true,
         expiresAt: {
@@ -254,14 +260,17 @@ export const setNewPasswordController = async (
     if (!tokenMatch) return res.status(498).send();
 
     // Invalidate token.
-    await updateResetPasswordToken({ id: foundToken.id }, { isValid: false });
+    await updateResetPasswordTokenService(
+      { id: foundToken.id },
+      { isValid: false }
+    );
 
     // Hashe password.
     req.body.data.password = await hashString(req.body.data.password);
     delete req.body.data.passwordConfirmation;
 
     // Set new password.
-    await updateAdmin(
+    await updateAdminService(
       { id: req.params.id },
       { password: req.body.data.password }
     );

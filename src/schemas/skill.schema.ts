@@ -1,4 +1,4 @@
-import { object, string, number, TypeOf } from "zod";
+import { object, string, number, TypeOf } from 'zod';
 
 export const createSkillSchema = object({
   body: object({

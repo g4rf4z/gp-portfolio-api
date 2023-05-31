@@ -1,14 +1,14 @@
-import { Request, Response } from "express";
+import { Request, Response } from 'express';
 
-import { handleError } from "../utils/errors.util";
+import { handleError } from '../utils/errors.util';
 
 import {
-  createSkill,
-  readSkill,
-  readSkills,
-  updateSkill,
-  deleteSkill,
-} from "../services/skill.service";
+  createSkillService,
+  readSkillService,
+  readSkillsService,
+  updateSkillService,
+  deleteSkillService,
+} from '../services/skill.service';
 
 import type {
   CreateSkillInput,
@@ -16,10 +16,10 @@ import type {
   ReadSkillsInput,
   UpdateSkillInput,
   DeleteSkillInput,
-} from "../schemas/skill.schema";
+} from '../schemas/skill.schema';
 
 export const createSkillController = async (
-  req: Request<{}, {}, CreateSkillInput["body"]>,
+  req: Request<{}, {}, CreateSkillInput['body']>,
   res: Response
 ) => {
   try {
@@ -33,7 +33,10 @@ export const createSkillController = async (
         progress: true,
       },
     };
-    const createdSkill = await createSkill(req.body.data, createSkillOptions);
+    const createdSkill = await createSkillService(
+      req.body.data,
+      createSkillOptions
+    );
     return res.send(createdSkill);
   } catch (error) {
     return handleError(error, res);
@@ -41,7 +44,7 @@ export const createSkillController = async (
 };
 
 export const readSkillController = async (
-  req: Request<ReadSkillInput["params"], {}, {}>,
+  req: Request<ReadSkillInput['params'], {}, {}>,
   res: Response
 ) => {
   try {
@@ -55,7 +58,7 @@ export const readSkillController = async (
         progress: true,
       },
     };
-    const foundSkill = await readSkill(req.params, readSkillOptions);
+    const foundSkill = await readSkillService(req.params, readSkillOptions);
     return res.send(foundSkill);
   } catch (error) {
     return handleError(error, res);
@@ -63,7 +66,7 @@ export const readSkillController = async (
 };
 
 export const readSkillsController = async (
-  req: Request<{}, {}, ReadSkillsInput["body"]>,
+  req: Request<{}, {}, ReadSkillsInput['body']>,
   res: Response
 ) => {
   try {
@@ -77,7 +80,10 @@ export const readSkillsController = async (
         progress: true,
       },
     };
-    const foundSkills = await readSkills(req.body.params, readSkillsOptions);
+    const foundSkills = await readSkillsService(
+      req.body.params,
+      readSkillsOptions
+    );
     if (foundSkills.length === 0) return res.status(204).send();
 
     return res.send(foundSkills);
@@ -87,7 +93,7 @@ export const readSkillsController = async (
 };
 
 export const updateSkillController = async (
-  req: Request<UpdateSkillInput["params"], {}, UpdateSkillInput["body"]>,
+  req: Request<UpdateSkillInput['params'], {}, UpdateSkillInput['body']>,
   res: Response
 ) => {
   try {
@@ -101,7 +107,7 @@ export const updateSkillController = async (
         progress: true,
       },
     };
-    const updatedSkill = await updateSkill(
+    const updatedSkill = await updateSkillService(
       { id: req.params.id },
       req.body.data,
       updateSkillOptions
@@ -113,7 +119,7 @@ export const updateSkillController = async (
 };
 
 export const deleteSkillController = async (
-  req: Request<DeleteSkillInput["params"], {}, {}>,
+  req: Request<DeleteSkillInput['params'], {}, {}>,
   res: Response
 ) => {
   try {
@@ -127,7 +133,7 @@ export const deleteSkillController = async (
         progress: true,
       },
     };
-    const deletedSkill = await deleteSkill(
+    const deletedSkill = await deleteSkillService(
       { id: req.params.id },
       deleteSkillOptions
     );

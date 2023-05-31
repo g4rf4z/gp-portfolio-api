@@ -1,6 +1,6 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response, NextFunction } from 'express';
 
-import { verifyJwt, reIssueAccessToken } from "../utils/jwt.util";
+import { verifyJwt, reIssueAccessToken } from '../utils/jwt.util';
 
 const deserializeToken = async (
   req: Request,
@@ -21,10 +21,10 @@ const deserializeToken = async (
 
   const newAccessToken = await reIssueAccessToken({ refreshToken });
   if (newAccessToken)
-    res.cookie("accessToken", newAccessToken, {
+    res.cookie('accessToken', newAccessToken, {
       maxAge: 900000,
       httpOnly: true,
-      sameSite: "none",
+      sameSite: 'none',
       secure: true,
     });
 

@@ -1,4 +1,4 @@
-import { array, object, string, TypeOf } from 'zod';
+import { object, string, array, TypeOf } from 'zod';
 
 export const createExperienceSchema = object({
   body: object({

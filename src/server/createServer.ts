@@ -8,9 +8,7 @@ import deserializeToken from '../middlewares/deserializeToken.middleware';
 
 import routes from '../routes';
 
-// Initialize an ExpressJS instance.
 const createServer = () => {
-  // Create an ExpressJS instance.
   const app = express();
   const clientUrl = config.get<string>('clientUrl').split(',');
   app.use(helmet());

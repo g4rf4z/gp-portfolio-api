@@ -30,8 +30,7 @@ export const sendEmail = async (data: EmailData) => {
   };
 
   try {
-    const info = await transporter.sendMail(emailOptions);
-    console.log('Email sent: ' + info.response);
+    await transporter.sendMail(emailOptions);
   } catch (error) {
     console.error(error);
   }
