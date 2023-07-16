@@ -1,3 +1,3 @@
 Grégoire Pinte Portfolio - API
 
-Portfolio API using Node.js, Express.js and TypeScript
+Built from scratch using TypeScript with Node.js, Express.js
