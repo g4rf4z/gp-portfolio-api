@@ -1,1 +1,1 @@
-Grégoire Pinte Portfolio - API
+Portfolio API

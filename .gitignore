@@ -1,13 +1,13 @@
-# Project
-node_modules
-build
-
-# Env
+# Env.
 .env
 
-# Lock files
-yarn.lock
+# Lock.
 package-lock.json
+yarn.lock
 
-# MISC
+# Project.
+build
+node_modules
+
+# MISC.
 .DS_Store

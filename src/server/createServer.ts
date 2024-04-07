@@ -8,22 +8,14 @@ import deserializeToken from '../middlewares/deserializeToken.middleware';
 
 import routes from '../routes';
 
-const createServer = () => {
+export const createServer = () => {
   const app = express();
   const clientUrl = config.get<string>('clientUrl').split(',');
   app.use(helmet());
-  app.use(
-    cors({
-      credentials: true,
-      origin: clientUrl,
-      methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-    })
-  );
+  app.use( cors({ credentials: true, origin: clientUrl, methods: ['GET', 'POST', 'PATCH', 'DELETE'] }));
   app.use(express.json({ limit: '5MB' }));
   app.use(cookieParser());
   app.use(deserializeToken);
   routes(app);
   return app;
 };
-
-export default createServer;
